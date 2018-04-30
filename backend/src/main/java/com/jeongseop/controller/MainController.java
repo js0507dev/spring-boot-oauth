@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class MainController {
-	@GetMapping("/")
+	@GetMapping("/main")
 	public String index(HttpServletRequest request) {
 		return "hello!";
 	}
