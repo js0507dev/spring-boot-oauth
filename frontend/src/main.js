@@ -2,16 +2,22 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
-import config from './config'
+import router from './config'
+
+//import '../node_modules/zepto/dist/zepto.js'
+
+import './assets/vendor/bootstrap/css/bootstrap.css'
+import './assets/vendor/bootstrap-social/bootstrap-social.css'
+import './assets/css/sb-admin-2.min.css'
+
+//import './assets/js/sb-admin-2.js'
 
 Vue.config.productionTip = false
-
-Vue.component('my-header', require('./shared-components/my-header.vue'))
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  config,
-  components: { App },
+  router,
+  components: {App},
   template: '<App/>'
 })

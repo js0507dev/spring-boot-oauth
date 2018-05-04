@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Layout from '@/spa/Layout'
+import Home from '@/spa/Home'
 
 Vue.use(Router)
 
@@ -8,14 +10,13 @@ export default new Router({
     {
       path: '/',
       name: 'layout',
-      component: Vue.component('Layout', require('../spa/Layout.vue')),
-	  children: [
-		{
-			path: 'home',
-			name: 'home',
-			component: Vue.component('Home', require('../spa/Home.vue'))
-		}
-	  ]
+      component: Layout,
+      children: [
+        {
+          path: '',
+          component: Home
+        }
+      ]
     }
   ]
 })
