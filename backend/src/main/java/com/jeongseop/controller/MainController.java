@@ -11,4 +11,8 @@ public class MainController {
 	public String index(HttpServletRequest request) {
 		return "hello!";
 	}
+	@GetMapping("/login")
+	public String logintest(HttpServletRequest request) {
+		return "hello! /login";
+	}
 }

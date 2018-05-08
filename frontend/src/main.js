@@ -8,7 +8,6 @@ import router from './config'
 
 import './assets/vendor/bootstrap/css/bootstrap.css'
 import './assets/vendor/bootstrap-social/bootstrap-social.css'
-import './assets/css/sb-admin-2.min.css'
 
 //import './assets/js/sb-admin-2.js'
 
