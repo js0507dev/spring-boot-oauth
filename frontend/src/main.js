@@ -3,15 +3,13 @@
 import Vue from 'vue'
 import App from './App'
 import router from './config'
-
-//import '../node_modules/zepto/dist/zepto.js'
+import axios from 'axios'
 
 import './assets/vendor/bootstrap/css/bootstrap.css'
 import './assets/vendor/bootstrap-social/bootstrap-social.css'
 
-//import './assets/js/sb-admin-2.js'
-
 Vue.config.productionTip = false
+Vue.prototype.$http = axios
 
 /* eslint-disable no-new */
 new Vue({

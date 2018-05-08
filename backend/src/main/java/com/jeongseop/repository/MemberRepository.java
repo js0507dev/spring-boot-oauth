@@ -1,14 +1,11 @@
 package com.jeongseop.repository;
 
 import com.jeongseop.domain.Member;
-import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import org.springframework.data.rest.core.annotation.RestResource;
 
-import java.util.List;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-@RepositoryRestResource
-public interface MemberRepository extends PagingAndSortingRepository<Member, Long> {
-    @RestResource(path = "names")
-    List<Member> findByName(String name);
+@Repository
+public interface MemberRepository extends CrudRepository<Member, Long> {
+	public Member findByUid(String uid);
 }
