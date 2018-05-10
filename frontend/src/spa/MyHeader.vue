@@ -14,7 +14,7 @@
 	<ul class="nav navbar-nav navbar-right">
 	  <li v-if="!user"><router-link to="/login">로그인</router-link></li>
 	  <li v-if="!user"><router-link to="/member/signup">회원가입</router-link></li>
-          <li v-if="user"><router-link to="/logout">로그아웃</router-link></li>
+    <li v-if="user"><router-link to="/logout">로그아웃</router-link></li>
 	</ul>
       </div>
     </div>

@@ -19,9 +19,9 @@ import com.jeongseop.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/members")
+@RequestMapping("members")
 @Slf4j
-public class MemberController {
+public class MemberController extends BaseController {
 	@Autowired
 	MemberRepository memberRepository;
 	
