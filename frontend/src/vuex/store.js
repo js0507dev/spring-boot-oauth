@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
 
 Vue.use(Vuex);
 
@@ -7,7 +8,7 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
   // this.$store.state.name;
   state: {
-    auth_server_url: 'http://localhost:8080',
+    auth_server_url: '',
     access_token: '',
     make_token_endpoint: '/oauth/authorize',
     client_id: 'cli' // 추후 변경해야함.
@@ -26,6 +27,21 @@ export const store = new Vuex.Store({
   // payload.key;
   mutations: {
     makeAccessToken: function(state, payload) {
+      const makeTokenUrl = state.auth_server_url + state.make_token_endpoint;
+      axios.get(makeTokenUrl, {
+        params: {
+          response_type: 'token',
+          client_id: payload.clientId,
+          redirect_uri: payload.redirectUri,
+          scope: payload.scope
+        }
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   },
   // this.$store.dispatch('name', {key:value});

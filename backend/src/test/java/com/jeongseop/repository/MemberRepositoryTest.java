@@ -37,10 +37,4 @@ public class MemberRepositoryTest {
 			memberRepository.save(member);
 		}
 	}
-	
-	@Test
-	public void testMember() {
-		Optional<Member> result = Optional.ofNullable(memberRepository.findOne(85L));
-		result.ifPresent(member -> log.info("member " + member));
-	}
 }
