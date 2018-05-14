@@ -9,12 +9,16 @@ export const store = new Vuex.Store({
   // this.$store.state.name;
   state: {
     auth_server_url: '',
-    access_token: '',
     make_token_endpoint: '/oauth/authorize',
-    client_id: 'cli' // 추후 변경해야함.
+    site_access_token: '',
+    site_access_token_type: '',
+    site_access_token_expire: '',
   },
   // this.getters.name;
   getters: {
+    siteAccessToken: state => {
+      return state.site_access_token;
+    }
   },
   // this.$store.commit('name', payload);
   // this.$store.commit('name', {
@@ -28,20 +32,20 @@ export const store = new Vuex.Store({
   mutations: {
     makeAccessToken: function(state, payload) {
       const makeTokenUrl = state.auth_server_url + state.make_token_endpoint;
-      axios.get(makeTokenUrl, {
-        params: {
-          response_type: 'token',
-          client_id: payload.clientId,
-          redirect_uri: payload.redirectUri,
-          scope: payload.scope
-        }
-      })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      let params = "?response_type="+payload.responseType
+          + "&client_id="+payload.clientId
+          + "&redirect_uri="+payload.redirectUri
+          + "&scope="+payload.scope;
+      window.location.href = makeTokenUrl + params;
+    },
+    checkSiteToken: function(state) {
+      let expire = state.site_access_token_expire;
+      if(expire != '') {
+        let td = new Date();
+        console.log("td["+ td.toLocaleString() +"]");
+        td.setTime(expire * 1000);
+        console.log("expire["+ td.toLocaleString() +"]");
+      }
     }
   },
   // this.$store.dispatch('name', {key:value});

@@ -15,7 +15,7 @@
 	  <li v-if="!user"><router-link to="/login">로그인</router-link></li>
 	  <li v-if="!user"><router-link to="/member/signup">회원가입</router-link></li>
     <li v-if="user"><router-link to="/logout">로그아웃</router-link></li>
-    <li><a href="#" @click="test">TEST</router-link></li>
+    <li><a href="#" @click="siteTokenCheck">TEST</a></li>
 	</ul>
       </div>
     </div>
@@ -24,13 +24,32 @@
 
 <script>
 export default {
+  mounted: function() {
+    this.siteTokenCheck();
+  },
   methods: {
-    test: function () {
-      this.$store.commit('makeAccessToken', {
-        clientId: 'cli',
-        redirectUri: '/',
-        scope: 'read'
-      });
+    siteTokenCheck: function () {
+      let fragment = location.hash.replace('#', '');
+      if(fragment == '' && this.$store.getters.siteAccessToken == '') {
+        this.$store.commit('makeAccessToken', {
+          responseType: 'token',
+          clientId: 'cli',
+          redirectUri: '/',
+          scope: 'read'
+        });
+      } else {
+        let arrFragment = fragment.split('&');
+        let token = arrFragment[0].substring(arrFragment[0].indexOf('=')+1, arrFragment[0].length);
+        let token_type = arrFragment[1].substring(arrFragment[1].indexOf('=')+1, arrFragment[1].length);
+        let expire = arrFragment[2].substring(arrFragment[2].indexOf('=')+1, arrFragment[2].length);
+        this.$store.state.site_access_token = token;
+        this.$store.state.site_access_token_type = token_type;
+        this.$store.state.site_access_token_expire = expire * 1;
+        console.log("frag=\'"+fragment+"\'");
+        console.log("token=\'"+this.$store.state.site_access_token+"\'");
+        console.log("token_type=\'"+this.$store.state.site_access_token_type+"\'");
+        console.log("token_expire=\'"+this.$store.state.site_access_token_expire+"\'");
+      }
     }
   }
 }
