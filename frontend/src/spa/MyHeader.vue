@@ -29,27 +29,33 @@ export default {
   },
   methods: {
     siteTokenCheck: function () {
-      let fragment = location.hash.replace('#', '');
-      if(fragment == '' && this.$store.getters.siteAccessToken == '') {
-        this.$store.commit('makeAccessToken', {
-          responseType: 'token',
-          clientId: 'cli',
-          redirectUri: '/',
-          scope: 'read'
-        });
-      } else {
-        let arrFragment = fragment.split('&');
-        let token = arrFragment[0].substring(arrFragment[0].indexOf('=')+1, arrFragment[0].length);
-        let token_type = arrFragment[1].substring(arrFragment[1].indexOf('=')+1, arrFragment[1].length);
-        let expire = arrFragment[2].substring(arrFragment[2].indexOf('=')+1, arrFragment[2].length);
-        this.$store.state.site_access_token = token;
-        this.$store.state.site_access_token_type = token_type;
-        this.$store.state.site_access_token_expire = expire * 1;
-        console.log("frag=\'"+fragment+"\'");
-        console.log("token=\'"+this.$store.state.site_access_token+"\'");
-        console.log("token_type=\'"+this.$store.state.site_access_token_type+"\'");
-        console.log("token_expire=\'"+this.$store.state.site_access_token_expire+"\'");
+      let access_token = this.$store.token.dispatch('token/GET_ACCESS_TOKEN');
+      if(access_token == null) {
+        if(this.) {
+
+        }
+        this.$store.token.commit('token/MAKE_ACCESS_TOKEN');
       }
+      let fragment = location.hash.replace('#', '');
+      let arrFragment = fragment.split('&');
+      let token = arrFragment[0].substring(arrFragment[0].indexOf('=')+1, arrFragment[0].length);
+      let token_type = arrFragment[1].substring(arrFragment[1].indexOf('=')+1, arrFragment[1].length);
+      let expire = arrFragment[2].substring(arrFragment[2].indexOf('=')+1, arrFragment[2].length);
+      this.$store.state.site_access_token = token;
+      this.$store.state.site_access_token_type = token_type;
+      this.$store.state.site_access_token_expire = expire * 1;
+      console.log("frag=\'"+fragment+"\'");
+      console.log("token=\'"+this.$store.state.site_access_token+"\'");
+      console.log("token_type=\'"+this.$store.state.site_access_token_type+"\'");
+      console.log("token_expire=\'"+this.$store.state.site_access_token_expire+"\'");
+    },
+    makeAccessToken: function() {
+      this.$store.commit('makeAccessToken', {
+        responseType: 'token',
+        clientId: 'cli',
+        redirectUri: '/',
+        scope: 'read'
+      });
     }
   }
 }
