@@ -11,54 +11,51 @@
           <li><router-link to="/quote">시세확인</router-link></li>
           <li><router-link to="/account">계좌관리</router-link></li>
         </ul>
-	<ul class="nav navbar-nav navbar-right">
-	  <li v-if="!user"><router-link to="/login">로그인</router-link></li>
-	  <li v-if="!user"><router-link to="/member/signup">회원가입</router-link></li>
-    <li v-if="user"><router-link to="/logout">로그아웃</router-link></li>
-    <li><a href="#" @click="siteTokenCheck">TEST</a></li>
-	</ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#" @click="login">로그인</a></li>
+          <li><router-link to="/logout">로그아웃</router-link></li>
+          <li @click="checkToken">토큰확인</li>
+        </ul>
       </div>
     </div>
   </nav>
 </template>
 
 <script>
-export default {
-  mounted: function() {
-    this.siteTokenCheck();
-  },
-  methods: {
-    siteTokenCheck: function () {
-      let access_token = this.$store.token.dispatch('token/GET_ACCESS_TOKEN');
-      if(access_token == null) {
-        if(this.) {
-
-        }
-        this.$store.token.commit('token/MAKE_ACCESS_TOKEN');
+  import {eventbus} from '../shared-component/Token.vue'
+  export default {
+    data: function() {
+      return {
+        token: '',
       }
-      let fragment = location.hash.replace('#', '');
-      let arrFragment = fragment.split('&');
-      let token = arrFragment[0].substring(arrFragment[0].indexOf('=')+1, arrFragment[0].length);
-      let token_type = arrFragment[1].substring(arrFragment[1].indexOf('=')+1, arrFragment[1].length);
-      let expire = arrFragment[2].substring(arrFragment[2].indexOf('=')+1, arrFragment[2].length);
-      this.$store.state.site_access_token = token;
-      this.$store.state.site_access_token_type = token_type;
-      this.$store.state.site_access_token_expire = expire * 1;
-      console.log("frag=\'"+fragment+"\'");
-      console.log("token=\'"+this.$store.state.site_access_token+"\'");
-      console.log("token_type=\'"+this.$store.state.site_access_token_type+"\'");
-      console.log("token_expire=\'"+this.$store.state.site_access_token_expire+"\'");
     },
-    makeAccessToken: function() {
-      this.$store.commit('makeAccessToken', {
-        responseType: 'token',
-        clientId: 'cli',
-        redirectUri: '/',
-        scope: 'read'
-      });
+    mounted: function() {
+      this.token = this.getAccessToken();
+    },
+    methods: {
+      checkToken: function () {
+        console.log(this.getAccessToken());
+        debugger;
+      },
+      getAccessToken: function () {
+        console.log("tttt")
+        return eventbus.$emit('readAccessToken');
+      },
+      login: function () {
+        let access_token = this.getAccessToken();
+        debugger;
+        alert(access_token);
+        if(access_token == '') {
+          eventbus.$emit('issuedAccessToken', {
+            responseType: 'token',
+            clientId: 'cli',
+            redirectUri: '/auth/callback',
+            scope: 'read'
+          });
+        }
+      }
     }
   }
-}
 </script>
 
 <style>

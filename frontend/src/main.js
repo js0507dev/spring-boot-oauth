@@ -4,7 +4,6 @@ import Vue from 'vue'
 import App from './App'
 import router from './config'
 import axios from 'axios'
-import {store} from './vuex/store'
 
 import './assets/vendor/bootstrap/css/bootstrap.css'
 import './assets/vendor/bootstrap-social/bootstrap-social.css'
@@ -16,7 +15,6 @@ Vue.prototype.$http = axios
 new Vue({
   el: '#app',
   router,
-  store,
   components: {App},
   template: '<App/>'
 })

@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <Token></Token>
     <MyHeader></MyHeader>
     <router-view/>
   </div>
@@ -7,11 +8,13 @@
 
 <script>
 import MyHeader from './spa/MyHeader.vue'
+import Token from './shared-component/Token.vue'
 
 export default {
   name: 'App',
   components: {
-    MyHeader
+    MyHeader,
+    Token
   }
 }
 </script>
