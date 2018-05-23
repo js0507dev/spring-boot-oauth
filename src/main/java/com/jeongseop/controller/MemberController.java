@@ -19,17 +19,26 @@ import com.jeongseop.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("members")
+@RequestMapping("/members")
 @Slf4j
 public class MemberController extends BaseController {
 	@Autowired
 	MemberRepository memberRepository;
+
+	@GetMapping("/{uid}")
+	public Member selectMember(
+			@PathVariable String uid) throws Exception {
+	    return memberRepository.findByUid(uid);
+	}
 	
 	@PostMapping("/{newid}")
-	public String join(@RequestBody Member member, @PathVariable String newid, HttpServletResponse response) throws Exception {
+	public String join(
+			@RequestBody Member member,
+			@PathVariable String newid,
+			HttpServletResponse response) throws Exception {
 		log.info("uid["+newid+"]");
 		log.info("member["+member+"]");
-		
+
 		Member old = memberRepository.findByUid(newid);
 		if(old != null && newid.equals(old.getUid())) {
 			throw new Exception("duplicate uid ["+newid+"]");

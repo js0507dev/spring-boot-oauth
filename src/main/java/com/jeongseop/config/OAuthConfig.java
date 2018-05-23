@@ -49,9 +49,9 @@ public class OAuthConfig {
 			clients
 				.inMemory()
 				.withClient("cli")
-				.autoApprove(true)
-				.authorizedGrantTypes("password", "implicit")
-				.scopes("read", "write");
+                    .autoApprove(true)
+                    .authorizedGrantTypes("password", "implicit")
+                    .scopes("read", "write");
 		}
 		
 		@Override
