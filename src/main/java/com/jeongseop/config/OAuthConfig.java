@@ -23,14 +23,6 @@ public class OAuthConfig {
 	@Configuration
 	@EnableResourceServer
 	protected static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
-		@Override
-		public void configure(HttpSecurity http) throws Exception {
-			http.headers().frameOptions().disable();
-			
-			http.authorizeRequests()
-				.antMatchers("/api/**").hasRole("USER")
-				.antMatchers("/**").permitAll();
-		}
 	}
 
 	@Configuration
