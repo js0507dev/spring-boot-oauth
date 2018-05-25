@@ -51,9 +51,4 @@ public class MemberController extends BaseController {
 		memberRepository.save(member);
 		return "{\"state\":\"success\"}";
 	}
-	
-	@GetMapping("")
-	public String list() {
-		return "test....";
-	}
 }
