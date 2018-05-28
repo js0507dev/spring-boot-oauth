@@ -52,7 +52,8 @@ public class OAuthConfig extends AuthorizationServerConfigurerAdapter {
         @Override
         public void configure(HttpSecurity http) throws Exception {
             http.authorizeRequests()
-                    .antMatchers("/api/**").hasRole("USER")
+                    .antMatchers("/admin/**").hasRole("ADMIN")
+                    .antMatchers("/member/**").hasRole("USER")
                     .antMatchers("/**").permitAll();
         }
     }
@@ -89,7 +90,7 @@ public class OAuthConfig extends AuthorizationServerConfigurerAdapter {
                     .withClient("cli")
                     .autoApprove(true)
                     .authorizedGrantTypes("password", "implicit")
-                    .scopes("read", "write");
+                    .scopes("member.info.public", "member.info.email");
         }
 
         @Override

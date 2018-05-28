@@ -1,5 +1,6 @@
 package com.jeongseop.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.sql.Date;
@@ -18,6 +19,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 @Data
 @Entity
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Member {
     @Id
     @GeneratedValue
