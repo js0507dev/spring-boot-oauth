@@ -88,6 +88,7 @@ public class OAuthConfig extends AuthorizationServerConfigurerAdapter {
             clients
                     .jdbc(dataSource)
                     .withClient("cli")
+                    .secret("secret")
                     .autoApprove(true)
                     .authorizedGrantTypes("password", "implicit")
                     .scopes("member.info.public", "member.info.email");
