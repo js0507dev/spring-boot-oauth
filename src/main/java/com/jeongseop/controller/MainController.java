@@ -1,18 +1,7 @@
 package com.jeongseop.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class MainController extends BaseController {
-	@GetMapping("/main")
-	public String index(HttpServletRequest request) {
-		return "hello!";
-	}
-	@GetMapping("/login")
-	public String logintest(HttpServletRequest request) {
-		return "hello! /login";
-	}
+public class MainController {
 }

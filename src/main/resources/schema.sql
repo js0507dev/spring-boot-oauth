@@ -1,3 +1,9 @@
+drop table oauth_access_token;
+drop table oauth_client_details;
+drop table oauth_client_token;
+drop table oauth_code;
+drop table oauth_refresh_token;
+
 create table oauth_client_details (
   client_id VARCHAR(255) PRIMARY KEY,
   resource_ids VARCHAR(255),
