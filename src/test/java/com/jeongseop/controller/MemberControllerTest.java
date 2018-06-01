@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,13 +26,16 @@ public class MemberControllerTest extends BaseTestController {
     public void testGetMemberInfo() {
         String userInfoEndpoint = "/member";
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorize", "Bearer " + getAccessToken());
+        headers.set("Authorization", "Bearer " + getAccessToken());
         HttpEntity entity = new HttpEntity(headers);
-        ResponseEntity<JSONObject> response = restTemplate.exchange(userInfoEndpoint, HttpMethod.GET, entity, JSONObject.class);
+        ResponseEntity<Map> response = restTemplate.exchange(userInfoEndpoint, HttpMethod.GET, entity, Map.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        JSONObject body = response.getBody();
-        assertThat(Optional.ofNullable(body.length()).orElse(0)).isLessThan(0);
+        assertThat(
+                Optional.ofNullable(response.getBody().get("uid"))
+                        .map(Object::toString)
+                        .orElse(""))
+                .isEqualTo(BaseTestController.testUid);
     }
 }
