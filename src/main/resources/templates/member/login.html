@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <title>Login Page</title>
+  <link rel="stylesheet" type="text/css" href="webjars/bootstrap/3.3.7/css/bootstrap.min.css"/>
+</head>
+<body>
+<script>
+  function validate(id) {
+    let msg_id = id + '_msg';
+    let text = document.getElementById(id).value;
+    let err = document.getElementById(msg_id);
+    if (text == '') {
+      err.innerHTML = '필수!';
+      err.style.display = '';
+      return false;
+    }
+    else {
+      err.style.display = 'none';
+      return true;
+    }
+  }
+
+  function onLogin() {
+    /*<![CDATA[*/
+    let chk = validate('username') & validate('password');
+    /*]]>*/
+    if (chk) {
+      document.forms['login_form'].submit();
+    } else {
+      console.log('입력해야함!');
+    }
+  }
+</script>
+<div class="container">
+  <div class="starter-template">
+    <h1>로그인</h1>
+    <form name="login_form" th:action="@{/login}" method="post">
+      <table>
+        <tr>
+          <th><label for="username"><span>아이디</span></label></th>
+          <td>
+            <input type="text" id="username" name="username" onblur="validate(this.id);"/>
+            <span id="username_msg" style="display:none; font-weight:bold; color:red;"></span>
+          </td>
+        </tr>
+        <tr>
+          <th><label for="password"><span>패스워드</span></label></th>
+          <td>
+            <input type="password" id="password" name="password" onblur="validate(this.id);"/>
+            <span id="password_msg" style="display:none; font-weight:bold; color:red;"></span>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <button onclick="onLogin();">로그인</button>
+            <span th:text="${param.err} ? '로그인에 실패했습니다.' : ''" style="font-weight:bold; color:red;"></span>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
+</div>
+<!-- /.container -->
+</body>
+</html>

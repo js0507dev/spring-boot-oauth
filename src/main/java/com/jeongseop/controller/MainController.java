@@ -1,7 +1,12 @@
 package com.jeongseop.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
-@RestController
+@Controller
 public class MainController {
+  @GetMapping("/loginForm")
+  public String login() {
+    return "member/login";
+  }
 }

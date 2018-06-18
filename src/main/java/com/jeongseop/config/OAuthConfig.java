@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,79 +25,90 @@ import javax.sql.DataSource;
 
 @Configuration
 public class OAuthConfig extends AuthorizationServerConfigurerAdapter {
-    private static final String RESOURCE_ID = "restservice";
+  private static final String RESOURCE_ID = "restservice";
 
-    @Configuration
-    @EnableResourceServer
-    protected static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
-        @Autowired
-        private TokenStore tokenStore;
+  @Configuration
+  @EnableResourceServer
+  protected static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
+    @Autowired
+    private TokenStore tokenStore;
 
-        @Bean
-        public PasswordEncoder userPasswordEncoder() {
-            return new BCryptPasswordEncoder();
-        }
-
-        @Bean
-        public AuthenticationSuccessHandler successHandler() {
-            return new LoginSuccessHandler();
-        }
-
-        @Override
-        public void configure(ResourceServerSecurityConfigurer resources) {
-            resources
-                    .tokenStore(tokenStore)
-                    .resourceId(RESOURCE_ID);
-        }
-
-        @Override
-        public void configure(HttpSecurity http) throws Exception {
-            http.authorizeRequests()
-                    .antMatchers("/admin/**").hasRole("ADMIN")
-                    .antMatchers("/member/**").hasRole("USER")
-                    .antMatchers("/**").permitAll();
-        }
+    @Bean
+    public PasswordEncoder userPasswordEncoder() {
+      return new BCryptPasswordEncoder();
     }
 
-    @Configuration
-    @EnableAuthorizationServer
-    protected static class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
-        @Autowired
-        private DataSource dataSource;
-
-        @Bean
-        public TokenStore jdbcTokenStore() {
-            return new JdbcTokenStore(dataSource);
-        }
-
-        @Autowired
-        private AuthenticationManager authenticationManager;
-
-        @Autowired
-        private UserDetailService userDetailService;
-
-        @Override
-        public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-            endpoints
-                    .tokenStore(jdbcTokenStore())
-                    .authenticationManager(authenticationManager)
-                    .userDetailsService(userDetailService);
-        }
-
-        @Override
-        public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-            clients
-                    .jdbc(dataSource)
-                    .withClient("cli")
-                    .secret("secret")
-                    .autoApprove(true)
-                    .authorizedGrantTypes("password", "implicit")
-                    .scopes("member.info.public", "member.info.email");
-        }
-
-        @Override
-        public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-            oauthServer.allowFormAuthenticationForClients();
-        }
+    @Bean
+    public AuthenticationSuccessHandler successHandler() {
+      return new LoginSuccessHandler();
     }
+
+    @Override
+    public void configure(ResourceServerSecurityConfigurer resources) {
+      resources
+          .tokenStore(tokenStore)
+          .resourceId(RESOURCE_ID);
+    }
+
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+      http.authorizeRequests()
+          .antMatchers("/oauth/authorize").authenticated()
+          .antMatchers("/admin/**").hasRole("ADMIN")
+          .antMatchers("/member/**").hasRole("USER")
+          .and()
+          .authorizeRequests().anyRequest().permitAll()
+          .and().csrf().disable()
+          .formLogin()
+          .loginPage("/loginForm")
+          .loginProcessingUrl("/login")
+          .failureUrl("/loginForm?err=1")
+          .permitAll()
+          .and()
+          .logout()
+          .permitAll();
+    }
+  }
+
+  @Configuration
+  @EnableAuthorizationServer
+  protected static class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
+    @Autowired
+    private DataSource dataSource;
+
+    @Bean
+    public TokenStore jdbcTokenStore() {
+      return new JdbcTokenStore(dataSource);
+    }
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UserDetailService userDetailService;
+
+    @Override
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+      endpoints
+          .tokenStore(jdbcTokenStore())
+          .authenticationManager(authenticationManager)
+          .userDetailsService(userDetailService);
+    }
+
+    @Override
+    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+      clients
+          .jdbc(dataSource)
+          .withClient("cli")
+          .secret("secret")
+          .autoApprove(true)
+          .authorizedGrantTypes("password", "implicit")
+          .scopes("member.info.public", "member.info.email");
+    }
+
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
+      oauthServer.allowFormAuthenticationForClients();
+    }
+  }
 }
