@@ -36,24 +36,21 @@ public class MemberController {
     }
 
     @PostMapping("/{newid}")
-    public String join(
+    public String signup(
             @RequestBody Member member,
-            @PathVariable String newid,
+            @PathVariable(required=true) String newid,
             HttpServletResponse response) throws Exception {
-        log.info("uid[" + newid + "]");
-        log.info("member[" + member + "]");
-
         Member old = memberRepository.findByUid(newid);
         if (old != null && newid.equals(old.getUid())) {
             throw new Exception("duplicate uid [" + newid + "]");
         }
 
-        MemberRole role = new MemberRole("BASIC");
+        MemberRole role = new MemberRole("USER");
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         member.setPassword(passwordEncoder.encode(member.getPassword()));
         member.setRoles(Arrays.asList(role));
         memberRepository.save(member);
-        return "{\"state\":\"success\"}";
+        return "";
     }
 
     private Member authenticationMember(Member member, Set<String> scopes) {
